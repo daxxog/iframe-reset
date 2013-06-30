@@ -29,33 +29,39 @@
                 
                 args.unshift($(this));
                 
-                return root[CLASS_NAME].apply(null, args);
+                return root[CLASS_NAME].apply(root, args);
             };
         }
   }
 }(this, function() {
-    var IframeReset = function(_j, fx) {
+    var IframeReset = function(_j, fx, pass) {
         var el = $(_j).get(0),
             j = $(el),
-            ctx;
-
-        var div = $('<div>'),
-            frame = $('<iframe>').css({
+            div = $('<div>'),
+            that = this,
+            _frame = $('<iframe>').css({
                 border: 0,
                 padding: 0,
                 margin: 0,
                 width: '100%',
                 height: '100%',
                 scroll: 'auto'
-            }).appendTo(j);
+            }).appendTo(j),
+            frame, ctx = _frame.get(0).contentWindow;
         
-        ctx = frame.contents();
-        ctx.find('body').append(div);
+        frame = _frame.contents();
+        frame.find('body').append(div);
+        
+        if(Array.isArray(pass)) {
+            pass.forEach(function(v, i, a) {
+                ctx[v] = that[v];
+            });
+        }
         
         if(typeof fx == 'function') {
             fx.apply(j, [div, function() {
-                return ctx.find.apply(ctx, arguments);
-            }]);
+                return frame.find.apply(frame, arguments);
+            }, ctx]);
         }
         
         return div;

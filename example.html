@@ -2,18 +2,22 @@
 <html>
     <head>
         <script src="./jquery.min.js" type="text/javascript"></script>
-        <script src="./IframeReset.min.js" type="text/javascript"></script>
+        <script src="./IframeReset.js" type="text/javascript"></script>
         
         <script type="text/javascript">
             $(function() {
-                $('div').IframeReset(function(e, $) {
+                $('div').IframeReset(function(e, $, w) {
                     e.html('#iframe');
                     $('body').css({
                         color: '#ff0000',
                         margin: 0,
                         padding: 0
                     });
-                });
+                    
+                    with(w) {
+                        console.log($);
+                    }
+                }, ['$', 'jQuery']);
             });
         </script>
         
