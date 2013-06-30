@@ -54,7 +54,30 @@
         
         if(Array.isArray(pass)) {
             pass.forEach(function(v, i, a) {
-                ctx[v] = that[v];
+                if(typeof that[v] != 'undefined') {
+                    ctx[v] = that[v];
+                } else {
+                    var inject = function(v) {
+                        var doc = ctx.document,
+                            type = typeof v,
+                            script = doc.createElement('script');
+                        
+                        script.type = 'text/javascript';
+                        script.onload = function () {
+                            console.log('load');
+                        };
+                        
+                        if(type == 'string') {
+                            script.src = v;
+                        } else if(type == 'function') {
+                            script.innerHTML = '(' + v.toString() + ')();';
+                        }
+                        
+                        doc.head.appendChild(script);
+                    };
+                    
+                    inject(v);
+                }
             });
         }
         

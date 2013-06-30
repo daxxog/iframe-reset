@@ -17,7 +17,11 @@
                     with(w) {
                         console.log($);
                     }
-                }, ['$', 'jQuery']);
+                }, ['./jquery.min.js', function() {
+                    r(function() {
+                        console.log($);
+                    });
+                }]);
             });
         </script>
         
